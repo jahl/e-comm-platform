@@ -1,0 +1,46 @@
+networks:
+  backend:
+
+volumes:
+  mongo_data:
+
+services:
+  mongo:
+    image: mongo:8.0
+    ports:
+      - "27017:27017"
+    networks: [ "backend" ]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 3x4mpl3
+    volumes:
+      - mongo_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  server: &app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: rails server -p 3000 -b 0.0.0.0
+    env_file: .env
+    ports:
+      - ${APP_WEB_PORT:-3000}:3000
+    depends_on:
+      - mongo
+    networks: [ "backend" ]
+    volumes:
+      - .:/usr/src
+    stdin_open: true
+    tty: true
+    environment:
+      DATABASE_URL: mongodb://dev_user:3x4mpl3@mongo:27017/e_comm_platform_development
+      RAILS_ENV: development
+      RACK_ENV: development
+
+  test:
+    <<: *app
+    command: rspec
+    environment:
+      DATABASE_URL: mongodb://test_user:3x4mpl3@mongo:27017/e_comm_platform_test
+      RAILS_ENV: test
+      RACK_ENV: test
