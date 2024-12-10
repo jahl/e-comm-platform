@@ -18,3 +18,9 @@ logs:
 
 mongo-up:
 	docker compose up -d mongo
+
+build-test:
+	docker compose build test
+
+run-test-ash:
+	docker compose run test ash
