@@ -1,0 +1,7 @@
+require: [rubocop-rails, rubocop-rspec_rails]
+
+AllCops:
+  SuggestExtensions: false
+
+Style/Documentation:
+  Enabled: false
