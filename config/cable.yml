@@ -1,5 +1,7 @@
 development:
-  adapter: async
+  adapter: redis
+  url: <%= ENV.fetch("REDIS_URL") { "redis://redis:6379/0" } %>
+  channel_prefix: e_comm_platform_development
 
 test:
   adapter: test

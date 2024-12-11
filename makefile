@@ -24,3 +24,6 @@ build-test:
 
 run-test-ash:
 	docker compose run test ash
+
+build-worker:
+	docker compose build worker
