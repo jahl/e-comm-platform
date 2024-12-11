@@ -57,4 +57,3 @@ end
 group :test do
   gem 'mongoid-rspec'
 end
-
