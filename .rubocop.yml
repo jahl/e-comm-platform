@@ -8,3 +8,6 @@ Style/Documentation:
 
 Metrics/BlockLength:
   Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false

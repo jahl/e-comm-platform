@@ -27,3 +27,6 @@ run-test-ash:
 
 build-worker:
 	docker compose build worker
+
+logs-worker:
+	docker compose logs -f worker
