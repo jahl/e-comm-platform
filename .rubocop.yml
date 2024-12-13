@@ -5,3 +5,9 @@ AllCops:
 
 Style/Documentation:
   Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false

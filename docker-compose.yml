@@ -17,6 +17,12 @@ services:
       - mongo_data:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
+  redis:
+    image: redis:7.0
+    networks: [ "backend" ]
+    ports:
+      - "6379:6379"
+
   server: &app
     build:
       context: .
@@ -27,6 +33,7 @@ services:
       - ${APP_WEB_PORT:-3000}:3000
     depends_on:
       - mongo
+      - worker
     networks: [ "backend" ]
     volumes:
       - .:/usr/src
@@ -36,10 +43,21 @@ services:
       DATABASE_URL: mongodb://dev_user:3x4mpl3@mongo:27017/e_comm_platform_development
       RAILS_ENV: development
       RACK_ENV: development
+      REDIS_URL: redis://redis:6379/0
+
+  worker:
+    <<: *app
+    command: bundle exec sidekiq
+    ports:
+      - 3001:3001
+    depends_on:
+      - redis
 
   test:
     <<: *app
     command: rspec
+    depends_on:
+      - mongo
     environment:
       DATABASE_URL: mongodb://test_user:3x4mpl3@mongo:27017/e_comm_platform_test
       RAILS_ENV: test
